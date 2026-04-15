@@ -74,26 +74,17 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
         peRatio={data.peRatio}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="lg:col-span-3">
           <PriceChart
             data={data.prices}
             timeRange={timeRange}
             onTimeRangeChange={setTimeRange}
             isPositive={data.changePercent >= 0}
           />
-          
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <VolumeChart data={data.prices} timeRange={timeRange} />
-            </div>
-            <div>
-              <RSIChart data={data.prices} timeRange={timeRange} />
-            </div>
-          </div>
         </div>
         
-        <div className="lg:col-span-1 space-y-4">
+        <div className="lg:col-span-1">
           <CompanyInfo
             symbol={data.symbol}
             name={data.name}
@@ -105,7 +96,20 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             peRatio={data.peRatio}
             onAskAI={onAskAI}
           />
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <VolumeChart data={data.prices} timeRange={timeRange} />
+        </div>
+        <div>
+          <RSIChart data={data.prices} timeRange={timeRange} />
+        </div>
+        <div>
           <MACDChart data={data.prices} timeRange={timeRange} />
+        </div>
+        <div>
           <BollingerBands data={data.prices} timeRange={timeRange} />
         </div>
       </div>

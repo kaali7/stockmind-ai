@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { LineChart, Clock, Plus, X } from 'lucide-react';
+import { useAppStore } from '../../store/appStore';
 
 interface SidebarProps {
   activeView: 'dashboard' | 'chat';
@@ -12,16 +13,16 @@ interface SidebarProps {
 const DEFAULT_STOCKS = ['AAPL', 'TSLA', 'GOOGL', 'MSFT', 'NVDA'];
 
 export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, currentSymbol }: SidebarProps) {
-  const [customStocks, setCustomStocks] = useState<string[]>([]);
+  const { watchlist, addToWatchlist, removeFromWatchlist } = useAppStore();
   const [isAdding, setIsAdding] = useState(false);
   const [newSymbol, setNewSymbol] = useState('');
 
-  const allStocks = [...DEFAULT_STOCKS, ...customStocks];
+  const allStocks = [...DEFAULT_STOCKS, ...watchlist];
 
   const handleAddStock = () => {
     const symbol = newSymbol.toUpperCase().trim();
     if (symbol && !allStocks.includes(symbol)) {
-      setCustomStocks([...customStocks, symbol]);
+      addToWatchlist(symbol);
       setNewSymbol('');
       setIsAdding(false);
     }
@@ -29,7 +30,7 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
 
   const handleRemoveStock = (symbol: string) => {
     if (!DEFAULT_STOCKS.includes(symbol)) {
-      setCustomStocks(customStocks.filter(s => s !== symbol));
+      removeFromWatchlist(symbol);
     }
   };
 
@@ -101,7 +102,7 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
             {!DEFAULT_STOCKS.includes(symbol) && (
               <button
                 onClick={() => handleRemoveStock(symbol)}
-                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-surface-container-high rounded transition-all"
+                className="p-1 hover:bg-surface-container-high rounded transition-all"
               >
                 <X className="h-3 w-3 text-tertiary" />
               </button>
