@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react';
-import { getQuote, getDailyPrices, getCompanyProfile, getCompanyPeers, getCompanyNews, getStockMetrics } from '../services/stockApi';
+import { useEffect, useState, useCallback } from 'react';
+import { getQuote, getDailyPrices, getCompanyProfile, getCompanyPeers, getCompanyNews, getStockMetrics, searchSymbols } from '../services/stockApi';
+
+export interface NotFoundError {
+  symbol: string;
+  suggestions: string[];
+}
 
 interface StockData {
   symbol: string;
@@ -29,6 +34,7 @@ export function useStockData(symbol: string | null) {
   const [data, setData] = useState<StockData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState<NotFoundError | null>(null);
 
   useEffect(() => {
     if (!symbol) {
@@ -65,6 +71,14 @@ export function useStockData(symbol: string | null) {
           getCompanyPeers(symbol),
           getCompanyNews(symbol),
         ]);
+
+        if (!quote.c && !profile.name) {
+          const searchResults = await searchSymbols(symbol);
+          const suggestions = searchResults.slice(0, 3).map(r => r.symbol);
+          setNotFound({ symbol, suggestions });
+          setLoading(false);
+          return;
+        }
 
         const formattedPrices =
           prices.t && prices.c
@@ -123,5 +137,9 @@ export function useStockData(symbol: string | null) {
     fetchData();
   }, [symbol]);
 
-  return { data, loading, error };
+  const clearNotFound = useCallback(() => {
+    setNotFound(null);
+  }, []);
+
+  return { data, loading, error, notFound, clearNotFound };
 }

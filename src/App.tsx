@@ -1,18 +1,20 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { Dashboard } from './pages/Dashboard';
 import { ChatDrawer } from './components/chat/ChatDrawer';
 import { ChatTrigger } from './components/chat/ChatTrigger';
+import { ErrorToast } from './components/shared/ErrorToast';
 import { useStockData } from './hooks/useStockData';
 import { useChat } from './hooks/useChat';
 
 function App() {
   const [currentSymbol, setCurrentSymbol] = useState('AAPL');
+  const [prevValidSymbol, setPrevValidSymbol] = useState('AAPL');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  const { data, loading } = useStockData(currentSymbol);
+  const { data, loading, notFound, clearNotFound } = useStockData(currentSymbol);
   
   const stockContext = data
     ? {
@@ -44,6 +46,17 @@ function App() {
   const handleSearch = useCallback((symbol: string) => {
     setCurrentSymbol(symbol);
   }, []);
+
+  const handleDismissError = useCallback(() => {
+    setCurrentSymbol(prevValidSymbol);
+    clearNotFound();
+  }, [prevValidSymbol, clearNotFound]);
+
+  useEffect(() => {
+    if (data && data.price > 0 && !notFound) {
+      setPrevValidSymbol(currentSymbol);
+    }
+  }, [data, notFound, currentSymbol]);
 
   const handleSelectStock = useCallback((symbol: string) => {
     setCurrentSymbol(symbol);
@@ -81,18 +94,21 @@ function App() {
           onNewChat={handleNewChat}
           onSelectStock={handleSelectStock}
           currentSymbol={currentSymbol}
+          onClose={() => setIsSidebarOpen(false)}
         />
       </div>
       
       <div className="flex flex-1 overflow-hidden relative w-full">
         <div className="flex flex-1 flex-col overflow-hidden">
-          <Header 
-            onSearch={handleSearch} 
-            currentSymbol={currentSymbol} 
-            onMenuClick={() => setIsSidebarOpen(true)} 
-          />
+          {!isSidebarOpen && (
+            <Header 
+              onSearch={handleSearch} 
+              currentSymbol={currentSymbol} 
+              onMenuClick={() => setIsSidebarOpen(true)} 
+            />
+          )}
           
-          <main className="flex-1 overflow-auto bg-surface p-4 md:p-6 pb-24 md:pb-6">
+          <main className="flex-1 overflow-auto bg-surface px-3 py-4 md:p-6 pb-24 md:pb-6">
             <Dashboard
               data={data}
               loading={loading}
@@ -120,6 +136,13 @@ function App() {
         <div className="fixed bottom-6 right-6 z-40 lg:absolute">
           <ChatTrigger onClick={() => setIsChatOpen(true)} />
         </div>
+      )}
+
+      {notFound && (
+        <ErrorToast
+          error={notFound}
+          onDismiss={handleDismissError}
+        />
       )}
     </div>
   );

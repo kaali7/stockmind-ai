@@ -149,6 +149,76 @@ export async function getCompanyNews(symbol: string, from?: string, to?: string)
   }
 }
 
+export interface SymbolSearchResult {
+  symbol: string;
+  name: string;
+  type: string;
+  region: string;
+  currency: string;
+}
+
+const MOCK_SEARCH_RESULTS: Record<string, SymbolSearchResult[]> = {
+  'A': [
+    { symbol: 'AAPL', name: 'Apple Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'ABNB', name: 'Airbnb Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'AMD', name: 'Advanced Micro Devices Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+  ],
+  'T': [
+    { symbol: 'TSLA', name: 'Tesla Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'T', name: 'AT&T Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'TM', name: 'Toyota Motor Corp.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+  ],
+  'G': [
+    { symbol: 'GOOGL', name: 'Alphabet Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'GOOG', name: 'Alphabet Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'GS', name: 'Goldman Sachs Group Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+  ],
+  'M': [
+    { symbol: 'MSFT', name: 'Microsoft Corporation', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'META', name: 'Meta Platforms Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'MMM', name: '3M Company', type: 'Common Stock', region: 'United States', currency: 'USD' },
+  ],
+  'N': [
+    { symbol: 'NVDA', name: 'NVIDIA Corporation', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'NFLX', name: 'Netflix Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+    { symbol: 'NKE', name: 'Nike Inc.', type: 'Common Stock', region: 'United States', currency: 'USD' },
+  ],
+};
+
+export async function searchSymbols(query: string): Promise<SymbolSearchResult[]> {
+  const key = getFinnhubKey();
+  
+  if (!key) {
+    const upperQuery = query.toUpperCase();
+    const mockResults = MOCK_SEARCH_RESULTS[upperQuery[0]] || [];
+    return mockResults.filter(r => 
+      r.symbol.toLowerCase().startsWith(upperQuery.toLowerCase()) || 
+      r.name.toLowerCase().includes(upperQuery.toLowerCase())
+    ).slice(0, 3);
+  }
+  
+  try {
+    const response = await fetch(`${FINNHUB_BASE}/search?q=${encodeURIComponent(query)}&token=${key}`);
+    if (!response.ok) {
+      return [];
+    }
+    const data = await response.json();
+    return (data.result || [])
+      .filter((r: any) => r.type === 'Common Stock' && r.region === 'United States')
+      .slice(0, 3)
+      .map((r: any) => ({
+        symbol: r.symbol,
+        name: r.description,
+        type: r.type,
+        region: r.region,
+        currency: r.currency,
+      }));
+  } catch (error) {
+    console.warn('Finnhub search error:', error);
+    return [];
+  }
+}
+
 function getMockQuote(symbol: string) {
   const mockPrices: Record<string, number> = {
     AAPL: 182.63,
