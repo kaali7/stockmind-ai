@@ -68,7 +68,7 @@ export function VolumeChart({ data, timeRange }: VolumeChartProps) {
   const chartData = filterDataByRange(data, timeRange);
   
   return (
-    <div className="rounded-xl bg-surface-container p-4">
+    <div className="rounded-xl bg-surface-container p-4 shadow-sm border border-outline-variant">
       <h3 className="mb-4 text-sm font-medium text-on_surface">Volume</h3>
       
       <div className="h-32 min-h-[128px]">

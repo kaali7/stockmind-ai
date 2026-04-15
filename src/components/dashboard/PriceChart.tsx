@@ -113,7 +113,7 @@ export function PriceChart({
   const color = isPositive ? '#4ae176' : '#ffb3ad';
 
   return (
-    <div className="rounded-xl bg-surface-container p-4">
+    <div className="rounded-xl bg-surface-container p-4 shadow-sm border border-outline-variant">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-medium text-on_surface">Price Chart (OHLC + SMA)</h3>
         <div className="flex gap-1">

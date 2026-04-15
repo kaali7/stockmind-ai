@@ -27,10 +27,8 @@ export function useChat(stockContext: StockContext | null) {
     setLoading(true);
 
     try {
-      let fullResponse = '';
-      
-      await sendMessageStream(updated, stockContext, (chunk) => {
-        fullResponse += chunk;
+      await sendMessageStream(updated, stockContext, (fullResponse) => {
+        // Instant output - no streaming effect
         setMessages(prev => {
           const newMessages = [...prev];
           newMessages[newMessages.length - 1] = { role: 'assistant', content: fullResponse };

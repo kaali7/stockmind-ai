@@ -44,7 +44,7 @@ export function KPICards({
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 md:gap-3">
-      <div className="rounded-xl bg-surface-container p-3">
+      <div className="rounded-xl bg-surface-container p-3 shadow-sm border border-outline-variant">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <Building2 className="h-3.5 w-3.5" />
           <span className="text-[10px] font-medium uppercase">Stock</span>
@@ -55,7 +55,7 @@ export function KPICards({
         <div className="mt-0.5 text-[9px] text-on_surface_variant truncate">{stockName || 'Company'}</div>
       </div>
 
-      <div className="rounded-xl bg-surface-container p-3">
+      <div className="rounded-xl bg-surface-container p-3 shadow-sm border border-outline-variant">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <DollarSign className="h-3.5 w-3.5" />
           <span className="text-[10px] font-medium uppercase">Price</span>
@@ -71,7 +71,7 @@ export function KPICards({
         </div>
       </div>
 
-      <div className="rounded-xl bg-surface-container p-3">
+      <div className="rounded-xl bg-surface-container p-3 shadow-sm border border-outline-variant">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <ArrowUpDown className="h-3.5 w-3.5" />
           <span className="text-[10px] font-medium uppercase">Open</span>
@@ -82,7 +82,7 @@ export function KPICards({
         <div className="mt-0.5 text-[10px] text-on_surface_variant">Prev: ${(prevClose || price).toFixed(2)}</div>
       </div>
 
-      <div className="rounded-xl bg-surface-container p-3">
+      <div className="rounded-xl bg-surface-container p-3 shadow-sm border border-outline-variant">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <BarChart3 className="h-3.5 w-3.5" />
           <span className="text-[10px] font-medium uppercase">Volume</span>
@@ -93,7 +93,7 @@ export function KPICards({
         <div className="mt-0.5 text-[10px] text-on_surface_variant">Trading vol</div>
       </div>
 
-      <div className="rounded-xl bg-surface-container p-3">
+      <div className="rounded-xl bg-surface-container p-3 shadow-sm border border-outline-variant">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <Activity className="h-3.5 w-3.5" />
           <span className="text-[10px] font-medium uppercase">M.Cap</span>
@@ -104,7 +104,7 @@ export function KPICards({
         <div className="mt-0.5 text-[10px] text-on_surface_variant">Market value</div>
       </div>
 
-      <div className="rounded-xl bg-surface-container p-3">
+      <div className="rounded-xl bg-surface-container p-3 shadow-sm border border-outline-variant">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <TrendingUp className="h-3.5 w-3.5" />
           <span className="text-[10px] font-medium uppercase">Day Range</span>

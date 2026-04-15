@@ -34,7 +34,7 @@ export function CompanyInfo({
   onAskAI 
 }: CompanyInfoProps) {
   return (
-    <div className="rounded-xl bg-surface-container p-4">
+    <div className="rounded-xl bg-surface-container p-4 shadow-sm border border-outline-variant">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-on_surface">Company Info</h3>
         <button

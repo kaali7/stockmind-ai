@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, Plus, Bot, User } from 'lucide-react';
+import { X, Send, Plus, User, MoreHorizontal, Zap } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -16,6 +16,14 @@ interface ChatDrawerProps {
   currentSymbol?: string;
 }
 
+const BotAvatar = ({ className }: { className?: string }) => (
+  <div className={`flex items-center justify-center rounded-lg bg-primary dark:bg-surface-container-highest text-white p-1.5 shadow-sm transition-colors ${className}`}>
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+      <path d="M12 2a1 1 0 0 1 1 1v1.1c3.15.25 5.75 2.85 6 6V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-8.9c.25-3.15 2.85-5.75 6-6V3a1 1 0 0 1 1-1zM7 10v9h10v-9H7zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </svg>
+  </div>
+);
+
 export function ChatDrawer({ 
   isOpen, 
   onClose, 
@@ -30,7 +38,7 @@ export function ChatDrawer({
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, loading]); // Added loading to scroll to thinking indicator
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,128 +51,144 @@ export function ChatDrawer({
   if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col h-full bg-surface-container-low shadow-2xl">
-      <div className="flex items-center justify-between p-4 border-b border-surface-container-highest shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-primary/10 rounded-lg">
-            <Bot className="h-5 w-5 text-primary" />
+    <div className="flex flex-col h-full bg-surface-container-low shadow-2xl border-l border-outline-variant/10 overflow-hidden lg:rounded-l-[1.0rem]">
+      {/* LeadBot Header */}
+      <div className="bg-primary dark:bg-black p-4 text-white shadow-lg relative z-20 md:p-5 transition-colors">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <BotAvatar className="h-10 w-10 border-2 border-white/20 dark:border-outline-variant/30" />
+            <div className="flex flex-col">
+              <span className="font-bold text-base leading-tight">StockMind AI</span>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-pulse-online absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                </span>
+                <span className="text-[10px] font-medium text-white/80 uppercase tracking-wider">Online Now</span>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-on_surface">StockMind AI</span>
-            {currentSymbol && (
-              <span className="text-xs font-medium text-on_surface_variant flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                {currentSymbol} Active
-              </span>
-            )}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/10 rounded-full transition-all hover:rotate-90 text-white"
+            >
+              <X className="h-6 w-6" />
+            </button>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onNewChat}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors border border-primary/20"
-          >
-            <Plus className="h-4 w-4" />
-            New
-          </button>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-surface-container-highest text-on_surface_variant transition-colors"
-          >
-            <X className="h-4 w-4" />
-          </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-4 space-y-5">
+      {/* Message Area */}
+      <div className="flex-1 overflow-auto p-4 space-y-6 bg-surface/50">
         {messages.length === 0 ? (
-          <div className="flex h-full items-center justify-center">
-            <div className="text-center space-y-3">
-              <div className="mx-auto w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.2)]">
-                <Bot className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="font-medium text-on_surface">
-                  Ask me about {currentSymbol || 'stocks'}
-                </p>
-                <p className="mt-1 text-xs text-on_surface_variant max-w-[200px] mx-auto">
-                  I can analyze technical indicators, news, and market sentiment.
-                </p>
-              </div>
+          <div className="flex flex-col h-full items-center justify-center text-center space-y-4 py-10">
+            <BotAvatar className="h-16 w-16 mb-2 scale-110" />
+            <div className="space-y-2 px-6">
+              <h3 className="text-xl font-bold text-on-surface">Need help? Ask StockMind!</h3>
+              <p className="text-sm text-on-surface-variant max-w-[240px] leading-relaxed">
+                I can help you analyze {currentSymbol || 'market data'}, track watchlists, and more.
+              </p>
             </div>
+            <button
+              onClick={onNewChat}
+              className="mt-4 px-8 py-3 rounded-full bg-primary dark:bg-surface-container-highest text-white text-sm font-bold shadow-lg hover:scale-105 active:scale-95 transition-all"
+            >
+              Start Chat
+            </button>
           </div>
         ) : (
-          messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex ${
-                message.role === 'user' ? 'justify-end' : 'justify-start'
-              }`}
-            >
-              <div
-                className={`flex max-w-[85%] items-start gap-3 rounded-2xl p-3.5 shadow-sm ${
-                  message.role === 'user'
-                    ? 'bg-primary text-surface rounded-br-sm'
-                    : 'bg-surface-container-highest text-on_surface border border-outline-variant/10 rounded-bl-sm'
-                }`}
-              >
-                {message.role === 'assistant' && (
-                  <div className="mt-0.5 bg-surface-container rounded-full p-1 border border-outline-variant/20 shrink-0">
-                    <Bot className="h-3.5 w-3.5 text-primary" />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</p>
+          <div className="space-y-6">
+            {messages.map((message, index) => {
+              const isAssistant = message.role === 'assistant';
+              const isPrevSame = index > 0 && messages[index - 1].role === message.role;
+              
+              return (
+                <div key={index} className={`space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300 ${isPrevSame ? '-mt-4' : ''}`}>
+                  {isAssistant ? (
+                    <div className="flex flex-col items-start gap-1">
+                      {!isPrevSame && (
+                        <span className="ml-11 text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-wider">
+                          StockMind AI
+                        </span>
+                      )}
+                      <div className="flex items-start gap-2 max-w-[90%] w-full">
+                        <div className="w-8 shrink-0">
+                          {!isPrevSame && <BotAvatar className="h-8 w-8 mt-1 bg-primary/90 dark:bg-surface-container-highest" />}
+                        </div>
+                        <div className="bg-surface-container-high text-on-surface p-4 rounded-3xl rounded-tl-sm shadow-sm border border-outline-variant/5 text-[13px] leading-relaxed w-full">
+                          {message.content}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-end gap-1">
+                      <div className="bg-primary dark:bg-surface-container-high text-white p-4 rounded-3xl rounded-tr-sm shadow-md max-w-[85%] text-[13px] leading-relaxed transition-colors">
+                        {message.content}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {message.role === 'user' && (
-                  <div className="mt-0.5 shrink-0 opacity-80">
-                    <User className="h-3.5 w-3.5" />
-                  </div>
-                )}
+              );
+            })}
+
+            {loading && (
+              <div className="flex flex-col items-start gap-1 -mt-4 animate-in fade-in duration-300">
+                 {/* Only show header if the last message wasn't also assistant */}
+                 {(messages.length === 0 || messages[messages.length-1].role !== 'assistant') && (
+                   <span className="ml-11 text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-wider">
+                     StockMind AI
+                   </span>
+                 )}
+                 <div className="flex items-start gap-2 max-w-[90%]">
+                   <div className="w-8 shrink-0">
+                    {(messages.length === 0 || messages[messages.length-1].role !== 'assistant') && (
+                      <BotAvatar className="h-8 w-8 mt-1 bg-primary/90 dark:bg-surface-container-highest" />
+                    )}
+                   </div>
+                   <div className="bg-surface-container-high text-on-surface p-4 rounded-3xl rounded-tl-sm shadow-sm border border-outline-variant/5 flex items-center gap-3">
+                     <div className="flex gap-1.5">
+                       <span className="w-1.5 h-1.5 rounded-full bg-primary/30 dark:bg-white/30 animate-bounce" style={{ animationDelay: '0ms' }} />
+                       <span className="w-1.5 h-1.5 rounded-full bg-primary/50 dark:bg-white/50 animate-bounce" style={{ animationDelay: '150ms' }} />
+                       <span className="w-1.5 h-1.5 rounded-full bg-primary/80 dark:bg-white/80 animate-bounce" style={{ animationDelay: '300ms' }} />
+                     </div>
+                     <span className="text-xs font-semibold text-primary dark:text-white/60">Thinking...</span>
+                   </div>
+                 </div>
               </div>
-            </div>
-          ))
-        )}
-        
-        {loading && (
-          <div className="flex justify-start">
-            <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm bg-surface-container-highest p-3 border border-outline-variant/10">
-              <div className="flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-              <span className="text-xs font-medium text-on_surface_variant">AI is typing...</span>
-            </div>
+            )}
           </div>
         )}
-        
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 bg-surface-container-low border-t border-surface-container-highest/50">
+      {/* Input Area */}
+      <div className="p-4 bg-surface-container-low border-t border-outline-variant/10 lg:pb-6">
         <form
           onSubmit={handleSubmit}
-          className="flex items-center gap-2 bg-surface-container-highest rounded-full p-1 pl-4 border border-outline-variant/20 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 transition-all shadow-inner"
+          className="relative transition-all group"
         >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={`Message StockMind AI...`}
+            placeholder={`Reply to StockMind AI...`}
             disabled={loading}
-            className="flex-1 bg-transparent py-2 text-sm text-on_surface placeholder:text-on_surface_variant focus:outline-none disabled:opacity-50"
+            className="w-full bg-surface-container-highest border border-outline-variant/50 rounded-2xl py-4 pl-5 pr-14 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-on-surface-variant/40"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-primary text-surface transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 shadow-sm"
+            className="absolute right-2 top-2 bottom-2 w-10 h-10 flex items-center justify-center rounded-xl bg-primary dark:bg-surface-container-highest text-white shadow-sm hover:scale-105 active:scale-95 disabled:opacity-0 disabled:scale-90 transition-all font-bold"
           >
-            <Send className="h-4 w-4 ml-0.5" />
+            <Send className="h-5 w-5" />
           </button>
         </form>
-        <div className="text-center mt-2">
-          <p className="text-[10px] text-on_surface_variant/70">AI can make mistakes. Verify important information.</p>
+        
+        <div className="mt-4 flex items-center justify-center gap-2 py-1">
+          <span className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-wider flex items-center gap-1">
+            We're <Zap className="h-3 w-3 fill-yellow-400 text-yellow-400" /> by StockMind
+          </span>
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ export function Header({ onSearch, currentSymbol, onMenuClick }: HeaderProps) {
         </div>
         <button
           type="submit"
-          className="rounded-lg bg-primary px-3 py-2 md:px-4 text-sm font-medium text-white transition-colors hover:opacity-90 min-w-max"
+          className="rounded-lg bg-primary px-3 py-2 md:px-4 text-sm font-medium text-white dark:text-black transition-colors hover:opacity-90 min-w-max"
         >
           Search
         </button>
