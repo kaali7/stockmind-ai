@@ -75,6 +75,13 @@ export function ChatDrawer({
           </div>
           <div className="flex items-center gap-1">
             <button
+              onClick={onNewChat}
+              title="New Chat"
+              className="p-2 hover:bg-white/10 rounded-full transition-all text-white"
+            >
+              <Plus className="h-5 w-5" />
+            </button>
+            <button
               onClick={onClose}
               className="p-2 hover:bg-white/10 rounded-full transition-all hover:rotate-90 text-white"
             >
@@ -107,9 +114,9 @@ export function ChatDrawer({
                 Suggested Questions
               </p>
               {[
-                `Analyze ${currentSymbol || 'AAPL'} performance`,
-                "What is the market sentiment today?",
-                "Find high-volume stock movers"
+                "What's their business model?",
+                "What's in the news today?",
+                "Give me a summary of this company"
               ].map((suggestion, i) => (
                 <button
                   key={i}
@@ -210,9 +217,12 @@ export function ChatDrawer({
           </button>
         </form>
         
-        <div className="mt-4 flex items-center justify-center gap-2 py-1">
-          <span className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-wider flex items-center gap-1">
-            We're <Zap className="h-3 w-3 fill-yellow-400 text-yellow-400" /> by StockMind
+        <div className="mt-2 flex flex-col items-center justify-center py-1 opacity-60">
+          <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-1">
+            We're <Zap className="h-2.5 w-2.5 fill-yellow-400 text-yellow-400" /> by StockMind
+          </span>
+          <span className="text-[8px] text-on-surface-variant font-medium mt-0.5">
+            AI can make mistakes. Check important info.
           </span>
         </div>
       </div>

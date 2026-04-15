@@ -22,7 +22,20 @@ function App() {
         change: data.change,
         changePercent: data.changePercent,
         sector: data.sector,
+        industry: data.industry,
         marketCap: data.marketCap,
+        high: data.high,
+        low: data.low,
+        volume: data.volume,
+        openPrice: data.prices?.[data.prices.length - 1]?.open || 0,
+        prevClose: data.prices?.[data.prices.length - 2]?.close || data.price,
+        high52Week: data.high52Week,
+        low52Week: data.low52Week,
+        peRatio: data.peRatio,
+        webUrl: data.webUrl,
+        ipo: data.ipo,
+        peers: data.peers,
+        news: data.news,
       }
     : null;
   

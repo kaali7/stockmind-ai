@@ -106,6 +106,49 @@ export async function getCompanyProfile(symbol: string) {
   }
 }
 
+export async function getCompanyPeers(symbol: string) {
+  const key = getFinnhubKey();
+  
+  if (!key) {
+    return [];
+  }
+  
+  try {
+    const response = await fetch(`${FINNHUB_BASE}/stock/peers?symbol=${symbol}&token=${key}`);
+    if (!response.ok) {
+      return [];
+    }
+    const data = await response.json();
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.warn('Finnhub peers error:', error);
+    return [];
+  }
+}
+
+export async function getCompanyNews(symbol: string, from?: string, to?: string) {
+  const key = getFinnhubKey();
+  
+  if (!key) {
+    return [];
+  }
+  
+  const fromDate = from || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const toDate = to || new Date().toISOString().split('T')[0];
+  
+  try {
+    const response = await fetch(`${FINNHUB_BASE}/company-news?symbol=${symbol}&from=${fromDate}&to=${toDate}&token=${key}`);
+    if (!response.ok) {
+      return [];
+    }
+    const data = await response.json();
+    return Array.isArray(data) ? data.slice(0, 5) : [];
+  } catch (error) {
+    console.warn('Finnhub news error:', error);
+    return [];
+  }
+}
+
 function getMockQuote(symbol: string) {
   const mockPrices: Record<string, number> = {
     AAPL: 182.63,

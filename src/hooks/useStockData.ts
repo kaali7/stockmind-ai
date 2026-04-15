@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getQuote, getDailyPrices, getCompanyProfile, getStockMetrics } from '../services/stockApi';
+import { getQuote, getDailyPrices, getCompanyProfile, getCompanyPeers, getCompanyNews, getStockMetrics } from '../services/stockApi';
 
 interface StockData {
   symbol: string;
@@ -19,6 +19,10 @@ interface StockData {
   high52Week: number;
   low52Week: number;
   peRatio: number;
+  webUrl: string;
+ ipo: string;
+  peers: string[];
+  news: Array<{ headline: string; summary: string; source: string; datetime: number }>;
 }
 
 export function useStockData(symbol: string | null) {
@@ -53,11 +57,13 @@ export function useStockData(symbol: string | null) {
       }
 
       try {
-        const [quote, prices, profile, metrics] = await Promise.all([
+        const [quote, prices, profile, metrics, peers, news] = await Promise.all([
           getQuote(symbol),
           getDailyPrices(symbol),
           getCompanyProfile(symbol),
           getStockMetrics(symbol),
+          getCompanyPeers(symbol),
+          getCompanyNews(symbol),
         ]);
 
         const formattedPrices =
@@ -90,6 +96,15 @@ export function useStockData(symbol: string | null) {
           high52Week: metrics?.['52WeekHigh']?.historical || quote.c * 1.25 || 0,
           low52Week: metrics?.['52WeekLow']?.historical || quote.c * 0.75 || 0,
           peRatio: metrics?.['peRatioTTM']?.trailing || 0,
+          webUrl: profile.weburl || '',
+          ipo: profile.ipo || '',
+          peers: peers || [],
+          news: news.map((n: any) => ({
+            headline: n.headline || '',
+            summary: n.summary || '',
+            source: n.source || '',
+            datetime: n.datetime || 0,
+          })) || [],
         };
 
         sessionStorage.setItem(

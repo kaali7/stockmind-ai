@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LineChart, Clock, Plus, X } from 'lucide-react';
+import { LineChart, Plus, X, Check } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 interface SidebarProps {
@@ -35,7 +35,7 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
   };
 
   return (
-    <aside className="flex w-56 flex-col bg-surface-container_low">
+    <aside className="flex w-56 flex-col bg-surface-container_low border-r border-surface">
       <nav className="flex flex-col gap-1 p-3">
         <div className="flex items-center gap-2 px-3 py-2">
           <LineChart className="h-5 w-5 text-primary" />
@@ -59,28 +59,34 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
         </div>
 
         {isAdding && (
-          <div className="flex items-center gap-2 px-3 py-2">
+          <div className="flex flex-col gap-2 px-3 py-2.5 bg-surface-container-high/30 rounded-lg mx-2 my-1 border border-surface-container-high">
             <input
               type="text"
               value={newSymbol}
               onChange={(e) => setNewSymbol(e.target.value)}
               placeholder="Symbol..."
               onKeyDown={(e) => e.key === 'Enter' && handleAddStock()}
-              className="flex-1 bg-surface-container-highest px-2 py-1 text-sm text-on_surface placeholder:text-on_surface_variant focus:outline-none focus:ring-1 focus:ring-primary rounded"
+              className="w-full bg-surface-container-highest px-3 py-2 text-sm text-on_surface placeholder:text-on_surface_variant focus:outline-none focus:ring-1 focus:ring-primary rounded-md"
               autoFocus
             />
-            <button
-              onClick={handleAddStock}
-              className="p-1 text-primary hover:bg-surface-container-high rounded"
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => { setIsAdding(false); setNewSymbol(''); }}
-              className="p-1 text-on_surface_variant hover:bg-surface-container-high rounded"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { setIsAdding(false); setNewSymbol(''); }}
+                title="Cancel"
+                className="flex-1 py-2 text-[10px] font-bold uppercase tracking-wider text-on_surface_variant bg-surface-container-high hover:bg-surface-container-highest rounded-lg transition-colors flex items-center justify-center gap-1.5"
+              >
+                <X className="h-3.5 w-3.5" />
+                Cancel
+              </button>
+              <button
+                onClick={handleAddStock}
+                title="Add to watchlist"
+                className="flex-1 py-2 text-[10px] font-bold uppercase tracking-wider text-white bg-primary hover:opacity-90 rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <Check className="h-3.5 w-3.5" />
+                Add
+              </button>
+            </div>
           </div>
         )}
 
@@ -95,14 +101,14 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
           >
             <button
               onClick={() => onSelectStock(symbol)}
-              className="flex items-center flex-1"
+              className="flex items-center flex-1 text-left"
             >
               <span className="font-mono">{symbol}</span>
             </button>
             {!DEFAULT_STOCKS.includes(symbol) && (
               <button
                 onClick={() => handleRemoveStock(symbol)}
-                className="p-1 hover:bg-surface-container-high rounded transition-all"
+                className="p-1 hover:bg-surface-container-high rounded transition-all opacity-0 group-hover:opacity-100"
               >
                 <X className="h-3 w-3 text-tertiary" />
               </button>

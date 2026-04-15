@@ -8,7 +8,20 @@ interface StockContext {
   change: number;
   changePercent: number;
   sector: string;
+  industry: string;
   marketCap: number;
+  high: number;
+  low: number;
+  volume: number;
+  openPrice: number;
+  prevClose: number;
+  high52Week: number;
+  low52Week: number;
+  peRatio: number;
+  webUrl: string;
+  ipo: string;
+  peers: string[];
+  news: Array<{ headline: string; summary: string; source: string; datetime: number }>;
 }
 
 interface Message {
