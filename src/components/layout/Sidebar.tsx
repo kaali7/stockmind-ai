@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LineChart, Plus, X, Check } from 'lucide-react';
+import { LineChart, Plus, X, Check, TrendingUp } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 interface SidebarProps {
@@ -8,11 +8,12 @@ interface SidebarProps {
   onNewChat: () => void;
   onSelectStock: (symbol: string) => void;
   currentSymbol: string;
+  onClose?: () => void;
 }
 
 const DEFAULT_STOCKS = ['AAPL', 'TSLA', 'GOOGL', 'MSFT', 'NVDA'];
 
-export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, currentSymbol }: SidebarProps) {
+export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, currentSymbol, onClose }: SidebarProps) {
   const { watchlist, addToWatchlist, removeFromWatchlist } = useAppStore();
   const [isAdding, setIsAdding] = useState(false);
   const [newSymbol, setNewSymbol] = useState('');
@@ -35,13 +36,37 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
   };
 
   return (
-    <aside className="flex w-56 flex-col bg-surface-container_low border-r border-surface">
+    <aside className="flex w-56 flex-col bg-surface-container_low h-full border-r border-surface">
       <nav className="flex flex-col gap-1 p-3">
-        <div className="flex items-center gap-2 px-3 py-2">
-          <LineChart className="h-5 w-5 text-primary" />
-          <span className="text-sm font-semibold text-primary">StockMind AI</span>
+        <div className="flex items-center justify-between px-3 py-2">
+          <div className="flex items-center gap-2">
+            <LineChart className="h-5 w-5 text-primary" />
+            <span className="text-sm font-semibold text-primary">StockMind AI</span>
+          </div>
+          <button 
+            onClick={onClose}
+            className="p-1 hover:bg-surface-container-high rounded lg:hidden"
+          >
+            <X className="h-5 w-5 text-on_surface_variant" />
+          </button>
         </div>
       </nav>
+
+      <div className="border-t border-surface" />
+
+      <div className="flex flex-col gap-1 px-3 py-3">
+        <div className="flex items-center gap-1.5 text-xs font-medium text-on_surface_variant uppercase tracking-wider mb-1">
+          <TrendingUp className="h-3 w-3" />
+          Currently Open
+        </div>
+        <button
+          onClick={() => onSelectStock(currentSymbol)}
+          className="flex items-center justify-between rounded-lg px-3 py-2.5 bg-primary/10 border border-primary/20 text-primary hover:bg-primary/15 transition-colors"
+        >
+          <span className="font-mono font-semibold">{currentSymbol}</span>
+          <span className="text-[10px] text-primary/70">Viewing</span>
+        </button>
+      </div>
 
       <div className="border-t border-surface" />
 
