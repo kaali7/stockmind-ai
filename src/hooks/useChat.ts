@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { sendMessage } from '../services/groqApi';
+import { sendMessageStream } from '../services/groqApi';
 
 interface StockContext {
   symbol: string;
@@ -23,16 +23,24 @@ export function useChat(stockContext: StockContext | null) {
   const send = useCallback(async (text: string) => {
     const userMsg: Message = { role: 'user', content: text };
     const updated = [...messages, userMsg];
-    setMessages(updated);
+    setMessages([...updated, { role: 'assistant', content: '' }]);
     setLoading(true);
 
     try {
-      const reply = await sendMessage(updated, stockContext);
-      setMessages([...updated, { role: 'assistant', content: reply }]);
+      let fullResponse = '';
+      
+      await sendMessageStream(updated, stockContext, (chunk) => {
+        fullResponse += chunk;
+        setMessages(prev => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1] = { role: 'assistant', content: fullResponse };
+          return newMessages;
+        });
+      });
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages([
-        ...updated,
+      setMessages(prev => [
+        ...prev,
         {
           role: 'assistant',
           content: 'I apologize, but I encountered an error processing your request.',

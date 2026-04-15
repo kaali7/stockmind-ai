@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, Plus, Bot, User, Loader2 } from 'lucide-react';
+import { X, Send, Plus, Bot, User } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -128,11 +128,13 @@ export function ChatDrawer({
         
         {loading && (
           <div className="flex justify-start">
-            <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm bg-surface-container-highest p-3.5 border border-outline-variant/10 shadow-sm">
-              <div className="bg-surface-container rounded-full p-1 border border-outline-variant/20 shrink-0">
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+            <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm bg-surface-container-highest p-3 border border-outline-variant/10">
+              <div className="flex gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
-              <span className="text-sm font-medium text-on_surface_variant">AI is thinking...</span>
+              <span className="text-xs font-medium text-on_surface_variant">AI is typing...</span>
             </div>
           </div>
         )}
