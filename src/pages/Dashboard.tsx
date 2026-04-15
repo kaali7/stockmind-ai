@@ -3,6 +3,8 @@ import { KPICards } from '../components/dashboard/KPICards';
 import { PriceChart } from '../components/dashboard/PriceChart';
 import { VolumeChart } from '../components/dashboard/VolumeChart';
 import { RSIChart } from '../components/dashboard/RSIChart';
+import { MACDChart } from '../components/dashboard/MACDChart';
+import { BollingerBands } from '../components/dashboard/BollingerBands';
 import { CompanyInfo } from '../components/dashboard/CompanyInfo';
 import { KPICardsSkeleton, ChartSkeleton, CompanyInfoSkeleton } from '../components/shared/SkeletonLoader';
 
@@ -87,6 +89,12 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             </div>
             <div>
               <RSIChart data={data.prices} timeRange={timeRange} />
+            </div>
+            <div>
+              <MACDChart data={data.prices} timeRange={timeRange} />
+            </div>
+            <div>
+              <BollingerBands data={data.prices} timeRange={timeRange} />
             </div>
           </div>
         </div>

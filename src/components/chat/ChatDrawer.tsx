@@ -17,10 +17,8 @@ interface ChatDrawerProps {
 }
 
 const BotAvatar = ({ className }: { className?: string }) => (
-  <div className={`flex items-center justify-center rounded-lg bg-primary dark:bg-surface-container-highest text-white p-1.5 shadow-sm transition-colors ${className}`}>
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-      <path d="M12 2a1 1 0 0 1 1 1v1.1c3.15.25 5.75 2.85 6 6V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-8.9c.25-3.15 2.85-5.75 6-6V3a1 1 0 0 1 1-1zM7 10v9h10v-9H7zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-    </svg>
+  <div className={`flex items-center justify-center rounded-lg bg-[var(--chat-header-bg)] text-white p-1.5 shadow-sm transition-colors ${className}`}>
+    <Bot className="w-full h-full" />
   </div>
 );
 
@@ -53,7 +51,7 @@ export function ChatDrawer({
   return (
     <div className="flex flex-col h-full bg-surface-container-low shadow-2xl border-l border-outline-variant/10 overflow-hidden lg:rounded-l-[1.0rem]">
       {/* LeadBot Header */}
-      <div className="bg-primary dark:bg-black p-4 text-white shadow-lg relative z-20 md:p-5 transition-colors">
+      <div className="bg-[var(--chat-header-bg)] p-4 text-white shadow-lg relative z-20 md:p-5 transition-colors">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BotAvatar className="h-10 w-10 border-2 border-white/20 dark:border-outline-variant/30" />
@@ -82,20 +80,40 @@ export function ChatDrawer({
       {/* Message Area */}
       <div className="flex-1 overflow-auto p-4 space-y-6 bg-surface/50">
         {messages.length === 0 ? (
-          <div className="flex flex-col h-full items-center justify-center text-center space-y-4 py-10">
-            <BotAvatar className="h-16 w-16 mb-2 scale-110" />
+          <div className="flex flex-col h-full items-center justify-center text-center space-y-8 py-10">
+            <div className="relative">
+              <BotAvatar className="h-20 w-20 scale-110" />
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-secondary rounded-full border-4 border-surface flex items-center justify-center">
+                 <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+              </div>
+            </div>
+            
             <div className="space-y-2 px-6">
-              <h3 className="text-xl font-bold text-on-surface">Need help? Ask StockMind!</h3>
-              <p className="text-sm text-on-surface-variant max-w-[240px] leading-relaxed">
-                I can help you analyze {currentSymbol || 'market data'}, track watchlists, and more.
+              <h3 className="text-2xl font-bold text-on-surface tracking-tight">How can I help you today?</h3>
+              <p className="text-sm text-on-surface-variant max-w-[280px] mx-auto leading-relaxed">
+                I'm your AI financial assistant. Ask me to analyze stocks or explain market trends.
               </p>
             </div>
-            <button
-              onClick={onNewChat}
-              className="mt-4 px-8 py-3 rounded-full bg-primary dark:bg-surface-container-highest text-white text-sm font-bold shadow-lg hover:scale-105 active:scale-95 transition-all"
-            >
-              Start Chat
-            </button>
+
+            <div className="w-full px-6 space-y-2 max-w-[320px]">
+              <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest text-left mb-3 ml-1">
+                Suggested Questions
+              </p>
+              {[
+                `Analyze ${currentSymbol || 'AAPL'} performance`,
+                "What is the market sentiment today?",
+                "Find high-volume stock movers"
+              ].map((suggestion, i) => (
+                <button
+                  key={i}
+                  onClick={() => onSend(suggestion)}
+                  className="w-full text-left p-4 rounded-2xl bg-surface-container-high border border-outline-variant/10 text-xs font-medium text-on-surface hover:bg-primary/10 hover:border-primary/30 hover:-translate-y-0.5 transition-all animate-in fade-in slide-in-from-bottom-2"
+                  style={{ animationDelay: `${i * 100}ms` }}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="space-y-6">
@@ -114,7 +132,7 @@ export function ChatDrawer({
                       )}
                       <div className="flex items-start gap-2 max-w-[90%] w-full">
                         <div className="w-8 shrink-0">
-                          {!isPrevSame && <BotAvatar className="h-8 w-8 mt-1 bg-primary/90 dark:bg-surface-container-highest" />}
+                          {!isPrevSame && <BotAvatar className="h-8 w-8 mt-1 border border-outline-variant/10" />}
                         </div>
                         <div className="bg-surface-container-high text-on-surface p-4 rounded-3xl rounded-tl-sm shadow-sm border border-outline-variant/5 text-[13px] leading-relaxed w-full">
                           {message.content}
@@ -123,7 +141,7 @@ export function ChatDrawer({
                     </div>
                   ) : (
                     <div className="flex flex-col items-end gap-1">
-                      <div className="bg-primary dark:bg-surface-container-high text-white p-4 rounded-3xl rounded-tr-sm shadow-md max-w-[85%] text-[13px] leading-relaxed transition-colors">
+                      <div className="bg-[var(--chat-user-bg)] text-white p-4 rounded-3xl rounded-tr-sm shadow-md max-w-[85%] text-[13px] leading-relaxed transition-colors">
                         {message.content}
                       </div>
                     </div>
@@ -143,16 +161,16 @@ export function ChatDrawer({
                  <div className="flex items-start gap-2 max-w-[90%]">
                    <div className="w-8 shrink-0">
                     {(messages.length === 0 || messages[messages.length-1].role !== 'assistant') && (
-                      <BotAvatar className="h-8 w-8 mt-1 bg-primary/90 dark:bg-surface-container-highest" />
+                      <BotAvatar className="h-8 w-8 mt-1 border border-outline-variant/10" />
                     )}
                    </div>
                    <div className="bg-surface-container-high text-on-surface p-4 rounded-3xl rounded-tl-sm shadow-sm border border-outline-variant/5 flex items-center gap-3">
                      <div className="flex gap-1.5">
-                       <span className="w-1.5 h-1.5 rounded-full bg-primary/30 dark:bg-white/30 animate-bounce" style={{ animationDelay: '0ms' }} />
-                       <span className="w-1.5 h-1.5 rounded-full bg-primary/50 dark:bg-white/50 animate-bounce" style={{ animationDelay: '150ms' }} />
-                       <span className="w-1.5 h-1.5 rounded-full bg-primary/80 dark:bg-white/80 animate-bounce" style={{ animationDelay: '300ms' }} />
+                       <span className="w-1.5 h-1.5 rounded-full bg-on-surface/20 animate-bounce" style={{ animationDelay: '0ms' }} />
+                       <span className="w-1.5 h-1.5 rounded-full bg-on-surface/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+                       <span className="w-1.5 h-1.5 rounded-full bg-on-surface/60 animate-bounce" style={{ animationDelay: '300ms' }} />
                      </div>
-                     <span className="text-xs font-semibold text-primary dark:text-white/60">Thinking...</span>
+                     <span className="text-xs font-semibold text-on-surface/50">Thinking...</span>
                    </div>
                  </div>
               </div>
@@ -179,7 +197,7 @@ export function ChatDrawer({
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="absolute right-2 top-2 bottom-2 w-10 h-10 flex items-center justify-center rounded-xl bg-primary dark:bg-surface-container-highest text-white shadow-sm hover:scale-105 active:scale-95 disabled:opacity-0 disabled:scale-90 transition-all font-bold"
+            className="absolute right-2 top-2 bottom-2 w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--chat-header-bg)] text-white shadow-sm hover:scale-105 active:scale-95 disabled:opacity-0 disabled:scale-90 transition-all font-bold"
           >
             <Send className="h-5 w-5" />
           </button>

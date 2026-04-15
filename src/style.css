@@ -15,6 +15,9 @@
   --on-surface: #e4e1e9;
   --on-surface-variant: #c7c4d7;
   --outline-variant: #464554;
+  --chat-header-bg: #000000;
+  --chat-user-bg: var(--surface-container-high);
+  --search-btn-text: #000000;
 }
 
 [data-theme="light"] {
@@ -32,6 +35,9 @@
   --on-surface: #0F172A;
   --on-surface-variant: #64748B;
   --outline-variant: #E2E8F0;
+  --chat-header-bg: var(--primary);
+  --chat-user-bg: var(--primary);
+  --search-btn-text: #FFFFFF;
 }
 
 @theme {

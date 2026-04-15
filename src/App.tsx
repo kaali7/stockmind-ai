@@ -89,7 +89,7 @@ function App() {
         </div>
         
         {isChatOpen && (
-          <div className="absolute inset-0 lg:static z-50 lg:z-auto w-full lg:w-[400px] border-l border-surface flex-shrink-0 bg-surface">
+          <div className="absolute inset-0 lg:static z-50 lg:z-auto w-full lg:w-[400px] border-l border-surface flex-shrink-0 bg-surface overflow-hidden h-full">
             <ChatDrawer
               isOpen={isChatOpen}
               onClose={() => setIsChatOpen(false)}
