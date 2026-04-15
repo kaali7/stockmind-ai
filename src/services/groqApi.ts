@@ -21,7 +21,13 @@ const getGroqKey = () => {
 
 function buildSystemPrompt(ctx: StockContext | null): string {
   if (!ctx) {
-    return `You are StockMind AI, a helpful financial analysis assistant. Be concise, data-driven, and always mention relevant risks. Never give direct buy or sell recommendations.`;
+    return `You are StockMind AI, a helpful financial analysis assistant.
+IMPORTANT: 
+- Be concise and direct in your answers
+- Never repeat information from previous messages
+- Never repeat the user's question back to them
+- Don't give direct buy or sell recommendations
+- Always mention relevant risks`;
   }
 
   return `You are StockMind AI, a financial analysis assistant.
@@ -32,7 +38,12 @@ Current context:
 - Sector: ${ctx.sector}
 - Market Cap: $${(ctx.marketCap / 1e9).toFixed(0)}B
 
-Provide concise, data-driven answers. Always mention relevant risks. Never give direct buy/sell recommendations.`;
+IMPORTANT:
+- Be concise and direct in your answers
+- Never repeat information from previous messages
+- Never repeat the user's question back to them
+- Don't give direct buy or sell recommendations
+- Always mention relevant risks`;
 }
 
 export async function sendMessageStream(
@@ -49,7 +60,6 @@ export async function sendMessageStream(
   }
 
   const systemPrompt = buildSystemPrompt(stockContext);
-  const userMessage = messages[messages.length - 1]?.content || '';
 
   try {
     const response = await fetch(GROQ_API_URL, {
@@ -60,15 +70,15 @@ export async function sendMessageStream(
       },
       body: JSON.stringify({
         model: 'llama-3.1-8b-instant',
-        temperature: 0.7,
+        temperature: 0.5,
+        max_tokens: 500,
         input: [
           { type: 'message', role: 'system', content: systemPrompt },
-          ...messages.slice(-8).map(msg => ({
+          ...messages.map(msg => ({
             type: 'message',
             role: msg.role === 'user' ? 'user' : 'assistant',
             content: msg.content
-          })),
-          { type: 'message', role: 'user', content: userMessage }
+          }))
         ],
       }),
     });
