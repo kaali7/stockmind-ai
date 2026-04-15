@@ -1,6 +1,8 @@
-import { Building2, TrendingUp, Info, BarChart2 } from 'lucide-react';
+import { Building2, TrendingUp, Info, BarChart2, Star, Plus, Trash2 } from 'lucide-react';
+import { useAppStore } from '../../store/appStore';
 
 interface CompanyInfoProps {
+  symbol: string;
   name: string;
   sector: string;
   industry: string;
@@ -24,6 +26,7 @@ function formatPrice(num: number): string {
 }
 
 export function CompanyInfo({ 
+  symbol,
   name, 
   sector, 
   industry, 
@@ -33,17 +36,41 @@ export function CompanyInfo({
   peRatio,
   onAskAI 
 }: CompanyInfoProps) {
+  const { watchlist, addToWatchlist, removeFromWatchlist, isInWatchlist } = useAppStore();
+  const isWatched = isInWatchlist(symbol);
+
+  const toggleWatchlist = () => {
+    if (isWatched) {
+      removeFromWatchlist(symbol);
+    } else {
+      addToWatchlist(symbol);
+    }
+  };
+
   return (
     <div className="rounded-xl bg-surface-container p-4 shadow-sm border border-outline-variant">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-on_surface">Company Info</h3>
-        <button
-          onClick={onAskAI}
-          className="flex items-center gap-2 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-surface transition-colors hover:bg-primary/90"
-        >
-          <Info className="h-3.5 w-3.5" />
-          Ask AI
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleWatchlist}
+            className={`flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors ${
+              isWatched
+                ? 'bg-yellow-500/20 text-yellow-500'
+                : 'bg-surface-container-highest text-on_surface_variant hover:text-yellow-500'
+            }`}
+            title={isWatched ? 'Remove from watchlist' : 'Add to watchlist'}
+          >
+            {isWatched ? <Trash2 className="h-3.5 w-3.5" /> : <Star className="h-3.5 w-3.5" />}
+          </button>
+          <button
+            onClick={onAskAI}
+            className="flex items-center gap-2 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-surface transition-colors hover:bg-primary/90"
+          >
+            <Info className="h-3.5 w-3.5" />
+            Ask AI
+          </button>
+        </div>
       </div>
 
       <div className="mt-4 space-y-4">

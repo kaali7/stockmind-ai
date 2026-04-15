@@ -83,23 +83,19 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             isPositive={data.changePercent >= 0}
           />
           
-          <div className="mt-4 grid grid-cols-2 gap-4">
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <VolumeChart data={data.prices} timeRange={timeRange} />
             </div>
             <div>
               <RSIChart data={data.prices} timeRange={timeRange} />
             </div>
-            <div>
-              <MACDChart data={data.prices} timeRange={timeRange} />
-            </div>
-            <div>
-              <BollingerBands data={data.prices} timeRange={timeRange} />
-            </div>
           </div>
         </div>
-        <div className="lg:col-span-1">
+        
+        <div className="lg:col-span-1 space-y-4">
           <CompanyInfo
+            symbol={data.symbol}
             name={data.name}
             sector={data.sector}
             industry={data.industry}
@@ -109,6 +105,8 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             peRatio={data.peRatio}
             onAskAI={onAskAI}
           />
+          <MACDChart data={data.prices} timeRange={timeRange} />
+          <BollingerBands data={data.prices} timeRange={timeRange} />
         </div>
       </div>
     </div>

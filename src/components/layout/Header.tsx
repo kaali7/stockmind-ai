@@ -1,4 +1,5 @@
-import { Search, LineChart, Menu } from 'lucide-react';
+import { useState } from 'react';
+import { Search, LineChart, Menu, X } from 'lucide-react';
 import { ThemeToggle } from '../shared/ThemeToggle';
 
 interface HeaderProps {
@@ -8,13 +9,18 @@ interface HeaderProps {
 }
 
 export function Header({ onSearch, currentSymbol, onMenuClick }: HeaderProps) {
+  const [query, setQuery] = useState('');
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const symbol = formData.get('symbol')?.toString().toUpperCase().trim();
+    const symbol = query.toUpperCase().trim();
     if (symbol) {
       onSearch(symbol);
     }
+  };
+
+  const handleClear = () => {
+    setQuery('');
   };
 
   return (
@@ -34,14 +40,27 @@ export function Header({ onSearch, currentSymbol, onMenuClick }: HeaderProps) {
             type="text"
             name="symbol"
             placeholder="Search ticker..."
-            className="h-10 w-full rounded-lg bg-surface-container-highest pl-10 pr-4 text-sm text-on_surface placeholder:text-on_surface_variant focus:outline-none focus:ring-2 focus:ring-primary"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="h-10 w-full rounded-lg bg-surface-container-highest pl-10 pr-10 text-sm text-on_surface placeholder:text-on_surface_variant focus:outline-none focus:ring-2 focus:ring-primary"
           />
+          {query && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-surface-container transition-colors"
+            >
+              <X className="h-4 w-4 text-on_surface_variant" />
+            </button>
+          )}
         </div>
         <button
           type="submit"
-          className="rounded-lg bg-primary px-3 py-2 md:px-4 text-sm font-medium text-[var(--search-btn-text)] transition-colors hover:opacity-90 min-w-max"
+          className="rounded-lg bg-primary px-3 py-2 md:px-4 text-sm font-medium text-[var(--search-btn-text)] transition-colors hover:opacity-90 min-w-max flex items-center gap-2"
         >
-          Search
+          <Search className="h-4 w-4 md:hidden" />
+          <span className="hidden md:inline">Search</span>
+          <span className="md:hidden">Go</span>
         </button>
       </form>
 
