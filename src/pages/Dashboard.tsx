@@ -57,7 +57,7 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <KPICards
         price={data.price}
         change={data.change}
@@ -74,7 +74,7 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
         peRatio={data.peRatio}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
           <PriceChart
             data={data.prices}
@@ -83,7 +83,7 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             isPositive={data.changePercent >= 0}
           />
           
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mt-4 grid grid-cols-2 gap-4">
             <div>
               <VolumeChart data={data.prices} timeRange={timeRange} />
             </div>

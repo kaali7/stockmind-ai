@@ -71,7 +71,7 @@ export function VolumeChart({ data, timeRange }: VolumeChartProps) {
     <div className="rounded-xl bg-surface-container p-4 shadow-sm border border-outline-variant">
       <h3 className="mb-4 text-sm font-medium text-on_surface">Volume</h3>
       
-      <div className="h-32 min-h-[128px]">
+      <div className="h-28">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} barGap={1}>
             <CartesianGrid

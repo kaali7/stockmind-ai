@@ -133,7 +133,7 @@ export function PriceChart({
         </div>
       </div>
 
-      <div className="h-80 min-h-[320px]">
+      <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData}>
             <defs>

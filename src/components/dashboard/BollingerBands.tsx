@@ -116,7 +116,7 @@ export function BollingerBands({ data, timeRange }: BollingerBandsProps) {
     <div className="rounded-xl bg-surface-container p-4">
       <h3 className="mb-4 text-sm font-medium text-on_surface">Bollinger Bands (20, 2)</h3>
       
-      <div className="h-40 min-h-[160px]">
+      <div className="h-28">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={bollingerData}>
             <CartesianGrid

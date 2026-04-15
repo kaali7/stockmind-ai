@@ -124,7 +124,7 @@ export function MACDChart({ data, timeRange }: MACDChartProps) {
     <div className="rounded-xl bg-surface-container p-4">
       <h3 className="mb-4 text-sm font-medium text-on_surface">MACD (12, 26, 9)</h3>
       
-      <div className="h-40 min-h-[160px]">
+      <div className="h-28">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={macdData}>
             <CartesianGrid
