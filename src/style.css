@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --surface: #131318;
+  --surface-container-low: #1b1b20;
+  --surface-container: #1f1f25;
+  --surface-container-high: #2a292f;
+  --surface-container-highest: #35343a;
+  --primary: #c0c1ff;
+  --primary-container: #8083ff;
+  --secondary: #4ae176;
+  --tertiary: #ffb3ad;
+  --error: #ffb4ab;
+  --on-surface: #e4e1e9;
+  --on-surface-variant: #c7c4d7;
+  --outline-variant: #464554;
+}
+
+[data-theme="light"] {
+  --surface: #FFFFFF;
+  --surface-container-low: #F8F9FA;
+  --surface-container: #FFFFFF;
+  --surface-container-high: #F3F4F6;
+  --surface-container-highest: #E5E7EB;
+  --primary: #4F46E5;
+  --primary-container: #6366F1;
+  --secondary: #10B981;
+  --tertiary: #EF4444;
+  --error: #EF4444;
+  --on-surface: #1F2937;
+  --on-surface-variant: #6B7280;
+  --outline-variant: #D1D5DB;
+}
+
+@theme {
+  --color-surface: var(--surface);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-error: var(--error);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline-variant: var(--outline-variant);
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--surface);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Smooth theme transition */
+* {
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
