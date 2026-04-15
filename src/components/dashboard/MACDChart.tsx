@@ -94,9 +94,9 @@ function filterDataByRange(
 
 function CustomTooltip({ active, payload, label }: any) {
   if (active && payload && payload.length) {
-    const m = payload.find(p => p.dataKey === 'macd')?.value;
-    const s = payload.find(p => p.dataKey === 'signal')?.value;
-    const h = payload.find(p => p.dataKey === 'histogram')?.value;
+    const m = payload.find((p: { dataKey: string }) => p.dataKey === 'macd')?.value;
+    const s = payload.find((p: { dataKey: string }) => p.dataKey === 'signal')?.value;
+    const h = payload.find((p: { dataKey: string }) => p.dataKey === 'histogram')?.value;
     
     if (m === undefined || isNaN(m)) return null;
     
