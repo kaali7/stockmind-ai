@@ -72,8 +72,8 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
         peRatio={data.peRatio}
       />
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
           <PriceChart
             data={data.prices}
             timeRange={timeRange}
@@ -81,7 +81,7 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             isPositive={data.changePercent >= 0}
           />
           
-          <div className="mt-6 grid grid-cols-2 gap-6">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <VolumeChart data={data.prices} timeRange={timeRange} />
             </div>
@@ -90,7 +90,7 @@ export function Dashboard({ data, loading, onAskAI }: DashboardProps) {
             </div>
           </div>
         </div>
-        <div>
+        <div className="lg:col-span-1">
           <CompanyInfo
             name={data.name}
             sector={data.sector}

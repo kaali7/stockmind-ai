@@ -76,4 +76,25 @@ body {
 /* Smooth theme transition */
 * {
   transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-container-highest) transparent;
+}
+
+/* Custom Webkit Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-container-highest);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline-variant);
 }

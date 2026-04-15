@@ -43,7 +43,7 @@ export function KPICards({
   const isPositive = changePercent >= 0;
 
   return (
-    <div className="grid grid-cols-6 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2 md:gap-3">
       <div className="rounded-xl bg-surface-container p-3">
         <div className="flex items-center gap-2 text-on_surface_variant">
           <Building2 className="h-3.5 w-3.5" />

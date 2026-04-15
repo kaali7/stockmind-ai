@@ -10,6 +10,7 @@ import { useChat } from './hooks/useChat';
 function App() {
   const [currentSymbol, setCurrentSymbol] = useState('AAPL');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const { data, loading } = useStockData(currentSymbol);
   
@@ -33,6 +34,7 @@ function App() {
 
   const handleSelectStock = useCallback((symbol: string) => {
     setCurrentSymbol(symbol);
+    setIsSidebarOpen(false); // Close sidebar on mobile after selection
   }, []);
 
   const handleAskAI = useCallback(() => {
@@ -46,23 +48,38 @@ function App() {
   const handleNewChat = useCallback(() => {
     newChat();
     setIsChatOpen(true);
+    setIsSidebarOpen(false); // Close sidebar if starting new chat from sidebar
   }, [newChat]);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-surface">
-      <Sidebar
-        activeView="dashboard"
-        onViewChange={() => {}}
-        onNewChat={handleNewChat}
-        onSelectStock={handleSelectStock}
-        currentSymbol={currentSymbol}
-      />
+    <div className="flex h-screen w-screen overflow-hidden bg-surface relative">
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 z-30 bg-black/60 lg:hidden backdrop-blur-sm"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      <div className={`absolute inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:relative lg:translate-x-0 h-full shadow-2xl lg:shadow-none ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <Sidebar
+          activeView="dashboard"
+          onViewChange={() => {}}
+          onNewChat={handleNewChat}
+          onSelectStock={handleSelectStock}
+          currentSymbol={currentSymbol}
+        />
+      </div>
       
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative w-full">
         <div className="flex flex-1 flex-col overflow-hidden">
-          <Header onSearch={handleSearch} currentSymbol={currentSymbol} />
+          <Header 
+            onSearch={handleSearch} 
+            currentSymbol={currentSymbol} 
+            onMenuClick={() => setIsSidebarOpen(true)} 
+          />
           
-          <main className="flex-1 overflow-auto bg-surface p-6">
+          <main className="flex-1 overflow-auto bg-surface p-4 md:p-6">
             <Dashboard
               data={data}
               loading={loading}
@@ -72,7 +89,7 @@ function App() {
         </div>
         
         {isChatOpen && (
-          <div className="w-[400px] border-l border-surface flex-shrink-0">
+          <div className="absolute inset-0 lg:static z-50 lg:z-auto w-full lg:w-[400px] border-l border-surface flex-shrink-0 bg-surface">
             <ChatDrawer
               isOpen={isChatOpen}
               onClose={() => setIsChatOpen(false)}
@@ -87,7 +104,9 @@ function App() {
       </div>
 
       {!isChatOpen && (
-        <ChatTrigger onClick={() => setIsChatOpen(true)} />
+        <div className="fixed bottom-6 right-6 z-40 lg:absolute">
+          <ChatTrigger onClick={() => setIsChatOpen(true)} />
+        </div>
       )}
     </div>
   );
