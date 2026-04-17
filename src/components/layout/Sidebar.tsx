@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LineChart, Plus, X, Check, TrendingUp } from 'lucide-react';
+import { Brain, Plus, X, Check, TrendingUp } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 interface SidebarProps {
@@ -40,8 +40,8 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
       <nav className="flex flex-col gap-1 p-3">
         <div className="flex items-center justify-between px-3 py-2">
           <div className="flex items-center gap-2">
-            <LineChart className="h-5 w-5 text-primary" />
-            <span className="text-sm font-semibold text-primary">StockMind AI</span>
+            <Brain className="h-5 w-5 text-primary" />
+            <span className="font-brand text-lg font-normal tracking-normal text-primary">StockMind AI</span>
           </div>
           <button 
             onClick={onClose}
