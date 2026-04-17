@@ -41,7 +41,7 @@ export function Sidebar({ activeView, onViewChange, onNewChat, onSelectStock, cu
         <div className="flex items-center justify-between px-3 py-2">
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <span className="text-sm font-semibold text-primary">StockMind AI</span>
+            <span className="font-brand text-lg font-normal tracking-normal text-primary">StockMind AI</span>
           </div>
           <button 
             onClick={onClose}

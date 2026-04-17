@@ -63,7 +63,7 @@ export function ChatDrawer({
           <div className="flex items-center gap-3">
             <BotAvatar className="h-10 w-10 border-2 border-white/20 dark:border-outline-variant/30" />
             <div className="flex flex-col">
-              <span className="font-bold text-base leading-tight">StockMind AI</span>
+              <span className="font-brand font-normal tracking-normal text-lg leading-tight">StockMind AI</span>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-pulse-online absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
@@ -140,7 +140,7 @@ export function ChatDrawer({
                   {isAssistant ? (
                     <div className="flex flex-col items-start gap-1">
                       {!isPrevSame && (
-                        <span className="ml-11 text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-wider">
+                        <span className="ml-11 font-brand text-[11px] font-normal text-on-surface-variant/70 tracking-normal">
                           StockMind AI
                         </span>
                       )}
@@ -168,7 +168,7 @@ export function ChatDrawer({
               <div className="flex flex-col items-start gap-1 -mt-4 animate-in fade-in duration-300">
                  {/* Only show header if the last message wasn't also assistant */}
                  {(messages.length === 0 || messages[messages.length-1].role !== 'assistant') && (
-                   <span className="ml-11 text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-wider">
+                   <span className="ml-11 font-brand text-[11px] font-normal text-on-surface-variant/70 tracking-normal">
                      StockMind AI
                    </span>
                  )}
